@@ -11,6 +11,33 @@ python3 -m http.server 8000
 # ثم افتح http://localhost:8000
 ```
 
+## النشر
+
+### خطوة لمرة واحدة (يدوية — إجبارية)
+
+من صفحة المستودع: **Settings → Pages → Build and deployment → Source**
+واختر **GitHub Actions**.
+
+لا يمكن أتمتة هذه الخطوة: توكن الـ Actions لا يملك صلاحية إنشاء موقع
+Pages (`Resource not accessible by integration`)، فلا بد من تفعيلها يدويًا
+مرة واحدة فقط.
+
+### بعدها
+
+يُنشر الموقع تلقائيًا عند كل دفع إلى `main`، عبر
+`.github/workflows/deploy-pages.yml`. لا توجد خطوة بناء — الملفات ثابتة
+تُرفع كما هي من جذر المستودع.
+
+عنوان الموقع بعد أول نشر ناجح: <https://faisaltlal.github.io/-/>
+
+### عند الربط بنطاق mishraf.io
+
+1. أضف ملف `CNAME` في جذر المستودع يحتوي على `mishraf.io`.
+2. اضبط سجلات DNS عند مزوّد النطاق لتشير إلى GitHub Pages.
+3. **مهم:** روابط `og:image` و`og:url` في `<head>` مطلقة على
+   `https://mishraf.io/` — ستعمل تلقائيًا بعد الربط، لكنها لا تعمل على
+   عنوان `github.io` المؤقت.
+
 ## البنية
 
 ```

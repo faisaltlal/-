@@ -26,12 +26,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Requires Pages to be switched on once, by hand:
+      #   Settings → Pages → Build and deployment → Source: GitHub Actions
+      # The `enablement` input cannot do it for us — GITHUB_TOKEN is not
+      # allowed to create a Pages site ("Resource not accessible by
+      # integration"). Until that switch is flipped this step fails with
+      # "Get Pages site failed … Not Found".
       - name: Configure Pages
-        # enablement turns Pages on for the repo if it is not already,
-        # so no manual switch in Settings is needed.
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
