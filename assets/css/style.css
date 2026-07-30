@@ -1,51 +1,10 @@
 /* =========================================================
    مشراف | Mishraf — Landing Page
-   Font: Thmanyah (خط ثمانية) · Direction: RTL
+   Font: Cairo (Google Fonts) · Direction: RTL
    ========================================================= */
 
-/* ---------------------------------------------------------
-   خط ثمانية
-   الترخيص لا يسمح بإعادة نشر ملفات الخط، لذلك لا تُشحن مع
-   المستودع. نزّلها من المصدر الرسمي font.thmanyah.com وضعها
-   في assets/fonts/ بالأسماء التالية، وستُستخدم تلقائيًا.
-   حتى ذلك الحين تعمل الصفحة بـ IBM Plex Sans Arabic كبديل.
-   --------------------------------------------------------- */
-@font-face {
-  font-family: "Thmanyah";
-  src: url("../fonts/Thmanyah-Light.woff2") format("woff2"),
-       url("../fonts/Thmanyah-Light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Thmanyah";
-  src: url("../fonts/Thmanyah-Regular.woff2") format("woff2"),
-       url("../fonts/Thmanyah-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Thmanyah";
-  src: url("../fonts/Thmanyah-Medium.woff2") format("woff2"),
-       url("../fonts/Thmanyah-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Thmanyah";
-  src: url("../fonts/Thmanyah-Bold.woff2") format("woff2"),
-       url("../fonts/Thmanyah-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
-  --font-ar: "Thmanyah", "IBM Plex Sans Arabic", "Segoe UI",
-             system-ui, -apple-system, sans-serif;
+  --font-ar: "Cairo", "Segoe UI", system-ui, -apple-system, sans-serif;
 
   /* Brand palette — taken from the Mishraf logo (#a67c62) */
   --brown-900: #1e150f;
