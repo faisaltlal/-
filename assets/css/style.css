@@ -1,41 +1,85 @@
 /* =========================================================
    مشراف | Mishraf — Landing Page
-   Font: IBM Plex Sans Arabic · Direction: RTL
+   Font: Thmanyah (خط ثمانية) · Direction: RTL
    ========================================================= */
 
+/* ---------------------------------------------------------
+   خط ثمانية
+   الترخيص لا يسمح بإعادة نشر ملفات الخط، لذلك لا تُشحن مع
+   المستودع. نزّلها من المصدر الرسمي font.thmanyah.com وضعها
+   في assets/fonts/ بالأسماء التالية، وستُستخدم تلقائيًا.
+   حتى ذلك الحين تعمل الصفحة بـ IBM Plex Sans Arabic كبديل.
+   --------------------------------------------------------- */
+@font-face {
+  font-family: "Thmanyah";
+  src: url("../fonts/Thmanyah-Light.woff2") format("woff2"),
+       url("../fonts/Thmanyah-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah";
+  src: url("../fonts/Thmanyah-Regular.woff2") format("woff2"),
+       url("../fonts/Thmanyah-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah";
+  src: url("../fonts/Thmanyah-Medium.woff2") format("woff2"),
+       url("../fonts/Thmanyah-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah";
+  src: url("../fonts/Thmanyah-Bold.woff2") format("woff2"),
+       url("../fonts/Thmanyah-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  /* Brand palette — warm brown / amber */
-  --brown-900: #1c0f08;
-  --brown-800: #2a1810;
-  --brown-700: #3a2116;
-  --brown-600: #4d2d1e;
-  --brown-500: #6b432c;
+  --font-ar: "Thmanyah", "IBM Plex Sans Arabic", "Segoe UI",
+             system-ui, -apple-system, sans-serif;
 
-  --amber-600: #b4682a;
-  --amber-500: #e0913f;
-  --amber-400: #edaa5c;
-  --amber-300: #f5c988;
+  /* Brand palette — taken from the Mishraf logo (#a67c62) */
+  --brown-900: #1e150f;
+  --brown-800: #2c211a;
+  --brown-700: #3d2e24;
+  --brown-600: #513e31;
+  --brown-500: #6b5342;
 
-  --sand-100: #fdfaf6;
-  --sand-200: #f7efe6;
-  --sand-300: #ecdfd1;
+  --brand-700: #74503a;  /* نص بني غامق على خلفية فاتحة */
+  --brand-500: #a67c62;  /* بني الشعار */
+  --brand-400: #c09a80;
+  --brand-300: #dcc0a7;  /* لمسات فاتحة على الخلفيات الداكنة */
 
-  --ink: #241610;
-  --ink-soft: #6a564b;
+  --sand-100: #fbf8f2;
+  --sand-200: #f4ece1;
+  --sand-300: #e7d9c8;
+
+  --ink: #2a1f18;
+  --ink-soft: #6b5a4d;
   --white: #ffffff;
 
-  --grad-brand: linear-gradient(135deg, #e0913f 0%, #c9752f 55%, #a4551f 100%);
-  --grad-dark: linear-gradient(150deg, #2a1810 0%, #3a2116 55%, #1c0f08 100%);
-  --grad-text: linear-gradient(120deg, #f5c988 0%, #e0913f 45%, #f0b062 100%);
+  /* تدرج الأزرار أغمق من بني الشعار ليحقق تباين AA مع النص الأبيض */
+  --grad-brand: linear-gradient(135deg, #96694f 0%, #7e563e 55%, #674531 100%);
+  --grad-dark: linear-gradient(150deg, #2c211a 0%, #3d2e24 55%, #1e150f 100%);
+  --grad-text: linear-gradient(120deg, #e8d2bc 0%, #c09a80 45%, #dfc4ab 100%);
 
   --radius-sm: 12px;
   --radius: 18px;
   --radius-lg: 26px;
 
-  --shadow-sm: 0 4px 16px rgba(42, 24, 16, .07);
-  --shadow: 0 14px 38px rgba(42, 24, 16, .10);
-  --shadow-lg: 0 26px 60px rgba(42, 24, 16, .16);
-  --shadow-brand: 0 14px 32px rgba(201, 117, 47, .32);
+  --shadow-sm: 0 4px 16px rgba(44, 33, 26, .07);
+  --shadow: 0 14px 38px rgba(44, 33, 26, .10);
+  --shadow-lg: 0 26px 60px rgba(44, 33, 26, .16);
+  --shadow-brand: 0 14px 32px rgba(126, 86, 62, .3);
 
   --header-h: 78px;
   --container: 1180px;
@@ -53,7 +97,7 @@ html {
 
 body {
   margin: 0;
-  font-family: "IBM Plex Sans Arabic", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ar);
   font-size: 16.5px;
   line-height: 1.85;
   color: var(--ink);
@@ -69,10 +113,10 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.35; font-weight: 700; letter-spacing:
 p { margin: 0; }
 button, input, textarea { font: inherit; color: inherit; }
 
-::selection { background: var(--amber-400); color: var(--brown-900); }
+::selection { background: var(--brand-400); color: var(--brown-900); }
 
 :focus-visible {
-  outline: 3px solid var(--amber-500);
+  outline: 3px solid var(--brand-500);
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -134,11 +178,11 @@ button, input, textarea { font: inherit; color: inherit; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(135deg, #f0a94f 0%, #d9812f 100%);
+  background: linear-gradient(135deg, #a67c62 0%, #8d6449 100%);
   opacity: 0;
   transition: opacity .3s var(--ease);
 }
-.btn-primary:hover { box-shadow: 0 20px 40px rgba(201, 117, 47, .42); }
+.btn-primary:hover { box-shadow: 0 20px 40px rgba(126, 86, 62, .42); }
 .btn-primary:hover::after { opacity: 1; }
 
 .btn-ghost {
@@ -155,8 +199,8 @@ button, input, textarea { font: inherit; color: inherit; }
   border: 1.6px solid var(--sand-300);
 }
 .btn-outline:hover {
-  border-color: var(--amber-500);
-  color: var(--amber-600);
+  border-color: var(--brand-500);
+  color: var(--brand-700);
   background: #fff;
   box-shadow: var(--shadow-sm);
 }
@@ -174,20 +218,21 @@ button, input, textarea { font: inherit; color: inherit; }
   inset-block-start: 0;
   inset-inline: 0;
   z-index: 100;
-  background: rgba(253, 250, 246, .72);
+  background: rgba(251, 248, 242, .72);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid transparent;
   transition: background-color .35s var(--ease), box-shadow .35s var(--ease),
               border-color .35s var(--ease);
 }
 .site-header.is-stuck {
-  background: rgba(253, 250, 246, .95);
+  background: rgba(251, 248, 242, .95);
   border-bottom-color: var(--sand-300);
-  box-shadow: 0 6px 26px rgba(42, 24, 16, .07);
+  box-shadow: 0 6px 26px rgba(44, 33, 26, .07);
 }
 
 /* At the top of the page the header floats over the dark hero. */
 .site-header:not(.is-stuck) { background: transparent; backdrop-filter: none; }
+.site-header:not(.is-stuck) .brand-mark { color: #fff; }
 .site-header:not(.is-stuck) .brand-name { color: #fff; }
 .site-header:not(.is-stuck) .brand-tag { color: rgba(255, 255, 255, .58); }
 .site-header:not(.is-stuck) .nav-toggle {
@@ -204,20 +249,15 @@ button, input, textarea { font: inherit; color: inherit; }
   gap: 20px;
 }
 
-.brand { display: inline-flex; align-items: center; gap: 12px; }
+.brand { display: inline-flex; align-items: center; gap: 13px; }
 .brand-mark {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 14px;
-  background: var(--grad-brand);
-  color: #fff;
-  box-shadow: var(--shadow-brand);
+  width: 58px;
+  flex: none;
+  color: var(--brand-500);
   transition: transform .4s var(--ease);
 }
-.brand-mark svg { width: 26px; height: 26px; }
-.brand:hover .brand-mark { transform: rotate(-6deg) scale(1.05); }
+.brand-mark svg { width: 100%; height: auto; }
+.brand:hover .brand-mark { transform: translateY(-3px); }
 .brand-text { display: flex; flex-direction: column; line-height: 1.25; }
 .brand-name { font-size: 1.42rem; font-weight: 700; color: var(--brown-800); }
 .brand-tag { font-size: .7rem; font-weight: 500; color: var(--ink-soft); letter-spacing: .5px; }
@@ -246,10 +286,10 @@ button, input, textarea { font: inherit; color: inherit; }
   background: var(--grad-brand);
   transition: width .3s var(--ease);
 }
-.nav-link:hover { color: var(--amber-600); background: var(--sand-200); }
+.nav-link:hover { color: var(--brand-700); background: var(--sand-200); }
 .nav-link:hover::after,
 .nav-link.is-active::after { width: 22px; }
-.nav-link.is-active { color: var(--amber-600); font-weight: 600; }
+.nav-link.is-active { color: var(--brand-700); font-weight: 600; }
 
 /* Light nav text while the header floats over the hero (desktop nav only —
    on mobile the links live inside an opaque drop-down panel). */
@@ -298,6 +338,27 @@ button, input, textarea { font: inherit; color: inherit; }
   isolation: isolate;
 }
 .hero-bg { position: absolute; inset: 0; z-index: -1; }
+
+/* صورة الخلفية — تختفي بلا أثر إذا لم يوجد الملف */
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  background-image: url("../img/hero.jpg");
+  background-size: cover;
+  background-position: center;
+  opacity: .2;
+  filter: saturate(.5) contrast(1.05);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .5) 66%, transparent 96%);
+}
+
+/* حجاب داكن يضمن قراءة العنوان فوق الصورة */
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 68% 58% at 50% 44%,
+              rgba(30, 21, 15, .84) 0%, rgba(30, 21, 15, .4) 58%, transparent 100%);
+}
 .hero-bg .glow {
   position: absolute;
   border-radius: 50%;
@@ -305,23 +366,15 @@ button, input, textarea { font: inherit; color: inherit; }
 }
 .glow-1 {
   width: 480px; height: 480px;
-  background: rgba(224, 145, 63, .34);
+  background: rgba(166, 124, 98, .34);
   inset-block-start: -140px;
   inset-inline-start: -110px;
 }
 .glow-2 {
   width: 400px; height: 400px;
-  background: rgba(180, 104, 42, .3);
+  background: rgba(140, 100, 76, .3);
   inset-block-end: -120px;
   inset-inline-end: -80px;
-}
-.hero-peaks {
-  position: absolute;
-  inset-block-end: -1px;
-  inset-inline: 0;
-  width: 100%;
-  height: 260px;
-  color: rgba(28, 15, 8, .85);
 }
 .hero::before {
   content: "";
@@ -343,9 +396,9 @@ button, input, textarea { font: inherit; color: inherit; }
   border-radius: 100px;
   font-size: .84rem;
   font-weight: 500;
-  color: var(--amber-300);
-  background: rgba(224, 145, 63, .12);
-  border: 1px solid rgba(224, 145, 63, .3);
+  color: var(--brand-300);
+  background: rgba(166, 124, 98, .14);
+  border: 1px solid rgba(166, 124, 98, .34);
   margin-bottom: 26px;
 }
 
@@ -355,7 +408,7 @@ button, input, textarea { font: inherit; color: inherit; }
   line-height: 1.3;
   margin-bottom: 24px;
 }
-.hero-title .dots { color: var(--amber-500); }
+.hero-title .dots { color: var(--brand-500); }
 .grad {
   background: var(--grad-text);
   -webkit-background-clip: text;
@@ -407,7 +460,7 @@ button, input, textarea { font: inherit; color: inherit; }
   gap: 9px;
   font-size: .85rem;
   font-weight: 600;
-  color: var(--amber-600);
+  color: var(--brand-700);
   margin-bottom: 14px;
 }
 .section-eyebrow::before {
@@ -457,9 +510,15 @@ button, input, textarea { font: inherit; color: inherit; }
   position: relative;
   aspect-ratio: 1 / .92;
   border-radius: var(--radius-lg);
-  background: var(--grad-dark);
   overflow: hidden;
   box-shadow: var(--shadow-lg);
+  /* صورة اختيارية: assets/img/about.jpg — بدونها يبقى التدرج وحده */
+  background-color: #2c211a;
+  background-image:
+    linear-gradient(155deg, rgba(44, 33, 26, .56) 0%, rgba(30, 21, 15, .82) 100%),
+    url("../img/about.jpg");
+  background-size: cover;
+  background-position: 50% 32%;
 }
 .about-card-stack::before {
   content: "";
@@ -469,7 +528,7 @@ button, input, textarea { font: inherit; color: inherit; }
   width: 70%;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: rgba(224, 145, 63, .35);
+  background: rgba(166, 124, 98, .35);
   filter: blur(70px);
 }
 .about-card-stack::after {
@@ -566,7 +625,7 @@ button, input, textarea { font: inherit; color: inherit; }
   height: 56px;
   border-radius: 16px;
   margin-bottom: 20px;
-  color: var(--amber-600);
+  color: var(--brand-700);
   background: var(--sand-200);
   transition: background .4s var(--ease), color .4s var(--ease),
               transform .4s var(--ease);
@@ -607,16 +666,16 @@ button, input, textarea { font: inherit; color: inherit; }
   width: 620px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: rgba(224, 145, 63, .13);
+  background: rgba(166, 124, 98, .15);
   filter: blur(110px);
   z-index: -1;
 }
 .compass .section-title { color: #fff; }
 .compass .section-text { color: rgba(255, 255, 255, .68); }
 .compass .section-head .section-eyebrow {
-  color: var(--amber-300);
-  background: rgba(224, 145, 63, .12);
-  border-color: rgba(224, 145, 63, .28);
+  color: var(--brand-300);
+  background: rgba(166, 124, 98, .14);
+  border-color: rgba(166, 124, 98, .32);
 }
 
 .compass-grid {
@@ -637,7 +696,7 @@ button, input, textarea { font: inherit; color: inherit; }
 .pillar:hover {
   transform: translateY(-6px);
   background: rgba(255, 255, 255, .075);
-  border-color: rgba(224, 145, 63, .42);
+  border-color: rgba(166, 124, 98, .5);
 }
 .pillar-top {
   display: flex;
@@ -684,13 +743,13 @@ button, input, textarea { font: inherit; color: inherit; }
   color: var(--brown-800);
   transition: color .25s var(--ease);
 }
-.contact-list a:hover { color: var(--amber-600); }
+.contact-list a:hover { color: var(--brand-700); }
 .ci {
   width: 46px; height: 46px;
   display: grid; place-items: center;
   border-radius: 14px;
   background: var(--sand-200);
-  color: var(--amber-600);
+  color: var(--brand-700);
   flex: none;
   transition: background .3s var(--ease), color .3s var(--ease);
 }
@@ -724,8 +783,8 @@ button, input, textarea { font: inherit; color: inherit; }
 .field input::placeholder, .field textarea::placeholder { color: #b3a297; }
 .field input:focus, .field textarea:focus {
   outline: none;
-  border-color: var(--amber-500);
-  box-shadow: 0 0 0 4px rgba(224, 145, 63, .16);
+  border-color: var(--brand-500);
+  box-shadow: 0 0 0 4px rgba(166, 124, 98, .2);
 }
 .field.has-error input, .field.has-error textarea { border-color: #d9534f; }
 .error { font-size: .82rem; color: #d9534f; min-height: 0; }
@@ -754,6 +813,7 @@ button, input, textarea { font: inherit; color: inherit; }
   padding-bottom: 54px;
 }
 .site-footer .brand-name { color: #fff; }
+.site-footer .brand-mark { color: #fff; }
 .site-footer .brand { margin-bottom: 18px; }
 .footer-about { max-width: 330px; line-height: 1.95; }
 
@@ -788,7 +848,7 @@ button, input, textarea { font: inherit; color: inherit; }
   transition: color .25s var(--ease), padding-inline-start .25s var(--ease);
 }
 .footer-links a:hover, .footer-contact a:hover {
-  color: var(--amber-400);
+  color: var(--brand-400);
   padding-inline-start: 6px;
 }
 
@@ -803,7 +863,7 @@ button, input, textarea { font: inherit; color: inherit; }
   font-size: .88rem;
   color: rgba(255, 255, 255, .5);
 }
-.footer-slogan { color: var(--amber-400); }
+.footer-slogan { color: var(--brand-400); }
 
 /* ---------- Floating WhatsApp ---------- */
 .wa-float {
