@@ -347,18 +347,6 @@ button, input, textarea { font: inherit; color: inherit; }
 
 .hero-inner { position: relative; text-align: center; }
 
-.eyebrow {
-  display: inline-block;
-  padding: 7px 20px;
-  border-radius: 100px;
-  font-size: .84rem;
-  font-weight: 500;
-  color: var(--brand-300);
-  background: rgba(166, 124, 98, .14);
-  border: 1px solid rgba(166, 124, 98, .34);
-  margin-bottom: 26px;
-}
-
 .hero-title {
   font-size: clamp(2.15rem, 6.2vw, 4.1rem);
   font-weight: 700;
