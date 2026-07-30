@@ -193,7 +193,6 @@ button, input, textarea { font: inherit; color: inherit; }
 .site-header:not(.is-stuck) { background: transparent; backdrop-filter: none; }
 .site-header:not(.is-stuck) .brand-mark { color: #fff; }
 .site-header:not(.is-stuck) .brand-name { color: #fff; }
-.site-header:not(.is-stuck) .brand-tag { color: rgba(255, 255, 255, .58); }
 .site-header:not(.is-stuck) .nav-toggle {
   background: rgba(255, 255, 255, .1);
   border-color: rgba(255, 255, 255, .26);
@@ -219,7 +218,6 @@ button, input, textarea { font: inherit; color: inherit; }
 .brand:hover .brand-mark { transform: translateY(-3px); }
 .brand-text { display: flex; flex-direction: column; line-height: 1.25; }
 .brand-name { font-size: 1.42rem; font-weight: 700; color: var(--brown-800); }
-.brand-tag { font-size: .7rem; font-weight: 500; color: var(--ink-soft); letter-spacing: .5px; }
 
 .nav { display: flex; align-items: center; gap: 30px; }
 .nav-list { display: flex; align-items: center; gap: 6px; }
