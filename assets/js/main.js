@@ -105,16 +105,10 @@
   function validate() {
     var ok = true;
     var name = field('name');
-    var email = field('email');
     var message = field('message');
 
     if (!name.value.trim()) { showError(name, 'من فضلك اكتب اسمك'); ok = false; }
     else showError(name, '');
-
-    if (!email.value.trim()) { showError(email, 'من فضلك اكتب بريدك الإلكتروني'); ok = false; }
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) {
-      showError(email, 'البريد الإلكتروني غير صحيح'); ok = false;
-    } else showError(email, '');
 
     if (message.value.trim().length < 10) {
       showError(message, 'اكتب رسالة من ١٠ أحرف على الأقل'); ok = false;
@@ -137,8 +131,7 @@
 
       /* No backend on a static page — the message is handed off to WhatsApp. */
       var text =
-        'السلام عليكم، أنا ' + field('name').value.trim() + '\n' +
-        'البريد: ' + field('email').value.trim() + '\n\n' +
+        'السلام عليكم، أنا ' + field('name').value.trim() + '\n\n' +
         field('message').value.trim();
 
       window.open(
