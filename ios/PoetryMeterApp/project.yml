@@ -35,6 +35,11 @@ targets:
       - path: Sources
       - path: Resources
         buildPhase: resources
+        # Info.plist يُعالَج عبر مفتاح info.path أدناه (ProcessInfoPlistFile)؛ استبعاده هنا يمنع
+        # نسخه أيضًا كمورد عادي (Copy Bundle Resources)، وإلا يتعارض الإخراجان على نفس الملف الناتج
+        # بخطأ "Multiple commands produce .../Info.plist".
+        excludes:
+          - "Info.plist"
     dependencies:
       - package: PoetryEngine
     info:
