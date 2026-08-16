@@ -84,17 +84,9 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.placeholder.poetrymeter.tests
         SWIFT_VERSION: "5.9"
 
-schemes:
-  PoetryMeterApp:
-    build:
-      targets:
-        PoetryMeterApp: all
-        PoetryMeterAppTests: [test]
-    run:
-      config: Debug
-    test:
-      config: Debug
-      targets:
-        - PoetryMeterAppTests
-    archive:
-      config: Release
+# لا نُعرِّف schemes: يدويًا عن قصد. أول محاولة بمخطَّط (scheme) يدوي فشلت بخطأ
+# "Could not find test host for PoetryMeterAppTests" لأن ربط اختبار الوحدة بتطبيقه المضيف
+# (Hosted Unit Test) لم يُوصَّل بشكل صحيح داخل تعريف الـ scheme اليدوي. XcodeGen يولّد مخطَّطًا
+# افتراضيًا لكل Target تلقائيًا (ما لم تُعرَّف schemes صراحة)، وهذا التوليد التلقائي مُختبَر جيدًا
+# ويربط تلقائيًا أي Target اختبار يعتمد على Target تطبيق (عبر dependencies: - target:) بوصفه
+# "Hosted"، فتُضبط TEST_HOST وBUNDLE_LOADER بشكل صحيح دون تدخّل يدوي.
