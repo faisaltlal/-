@@ -63,23 +63,19 @@ jobs:
           echo "udid=$UDID" >> "$GITHUB_OUTPUT"
           echo "سيُستخدم المحاكي: $UDID"
 
-      - name: xcodebuild build-for-testing
+      # نستخدم أمر "test" الواحد (بدل build-for-testing + test-without-building منفصلَين) عن قصد:
+      # المحاولة الأولى بخطوتين فشلت بخطأ "Scheme ... is not currently configured for the
+      # test-without-building action" لأن كل استدعاء xcodebuild منفصل قد يحسب مسار DerivedData
+      # مختلفًا، فلا يجد test-without-building ملفات .xctestrun التي أنتجها الاستدعاء السابق.
+      # أمر test الواحد يبني ويختبر في نفس العملية، فيتفادى المشكلة تمامًا.
+      - name: xcodebuild test
         working-directory: ios/PoetryMeterApp
         run: |
           set -o pipefail
-          xcodebuild build-for-testing \
+          xcodebuild test \
             -project PoetryMeterApp.xcodeproj \
             -scheme PoetryMeterApp \
             -configuration Debug \
-            -destination "id=${{ steps.simulator.outputs.udid }}"
-
-      - name: xcodebuild test-without-building
-        working-directory: ios/PoetryMeterApp
-        run: |
-          set -o pipefail
-          xcodebuild test-without-building \
-            -project PoetryMeterApp.xcodeproj \
-            -scheme PoetryMeterApp \
             -destination "id=${{ steps.simulator.outputs.udid }}"
 
       # --- نسخة تفاعلية للتجربة عبر المتصفح (Appetize.io) — راجع ios/CI_CD.md لإعداد الحساب والمفتاح ---
