@@ -92,6 +92,10 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.placeholder.poetrymeter.tests
         SWIFT_VERSION: "5.9"
+        # بلا هذا، فشل التوقيع بخطأ "Cannot code sign because the target does not have an
+        # Info.plist file" — لا يوجد ملف Info.plist مكتوب يدويًا لهدف الاختبار (لا حاجة له أصلًا)،
+        # فنطلب من Xcode توليده تلقائيًا كما أوصى الخطأ نفسه.
+        GENERATE_INFOPLIST_FILE: YES
 
 # نُعرِّف scheme صراحة: جُرِّب الاعتماد على التوليد التلقائي لـ XcodeGen (بلا هذا القسم) في محاولة سابقة،
 # فتبيَّن أن الـ scheme الناتج تلقائيًا لا يُدرج PoetryMeterAppTests في إجراء الاختبار إطلاقًا
