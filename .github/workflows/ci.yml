@@ -51,6 +51,12 @@ jobs:
         working-directory: ios/PoetryMeterApp
         run: xcodegen generate
 
+      # تشخيصية: تطبع محتوى الـ scheme المولَّد فعليًا في السجلّ، حتى يمكن تتبّع أي مشكلة توقيع/اختبار
+      # مستقبلية من سجلّ الـ run مباشرة بدل التخمين الأعمى.
+      - name: Show generated scheme (debug)
+        working-directory: ios/PoetryMeterApp
+        run: find PoetryMeterApp.xcodeproj -name "*.xcscheme" -print -exec cat {} \;
+
       - name: Resolve an available iOS Simulator
         id: simulator
         run: |

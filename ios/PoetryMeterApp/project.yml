@@ -57,7 +57,11 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.placeholder.poetrymeter
-        PRODUCT_NAME: "$(APP_DISPLAY_NAME)"
+        # عمدًا لا نُخصِّص PRODUCT_NAME هنا (يبقى $(TARGET_NAME) الافتراضي، أي "PoetryMeterApp.app").
+        # أول محاولة ربطت PRODUCT_NAME بـ APP_DISPLAY_NAME (يتغيّر حسب الإعداد: "Poetry Meter (Debug)"
+        # إلخ)، فأصبح اسم الحزمة الناتجة مختلفًا عن الاسم الذي يفترضه Xcode تلقائيًا عند حساب TEST_HOST
+        # لاختبار الوحدة المضيَّف (Hosted Unit Test) — فشل البناء بخطأ "Could not find test host".
+        # الاسم الظاهر للمستخدم مضبوط بشكل صحيح ومنفصل عبر CFBundleDisplayName أدناه.
         MARKETING_VERSION: "1.0.0"
         CURRENT_PROJECT_VERSION: "1"
         SWIFT_VERSION: "5.9"
@@ -89,9 +93,22 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.placeholder.poetrymeter.tests
         SWIFT_VERSION: "5.9"
 
-# لا نُعرِّف schemes: يدويًا عن قصد. أول محاولة بمخطَّط (scheme) يدوي فشلت بخطأ
-# "Could not find test host for PoetryMeterAppTests" لأن ربط اختبار الوحدة بتطبيقه المضيف
-# (Hosted Unit Test) لم يُوصَّل بشكل صحيح داخل تعريف الـ scheme اليدوي. XcodeGen يولّد مخطَّطًا
-# افتراضيًا لكل Target تلقائيًا (ما لم تُعرَّف schemes صراحة)، وهذا التوليد التلقائي مُختبَر جيدًا
-# ويربط تلقائيًا أي Target اختبار يعتمد على Target تطبيق (عبر dependencies: - target:) بوصفه
-# "Hosted"، فتُضبط TEST_HOST وBUNDLE_LOADER بشكل صحيح دون تدخّل يدوي.
+# نُعرِّف scheme صراحة: جُرِّب الاعتماد على التوليد التلقائي لـ XcodeGen (بلا هذا القسم) في محاولة سابقة،
+# فتبيَّن أن الـ scheme الناتج تلقائيًا لا يُدرج PoetryMeterAppTests في إجراء الاختبار إطلاقًا
+# ("Scheme PoetryMeterApp is not currently configured for the test action"). الخطأ الأقدم
+# ("Could not find test host") لم يكن سببه هذا الـ scheme اليدوي، بل تعارض PRODUCT_NAME مع
+# APP_DISPLAY_NAME (أُصلح أعلاه) — لذلك نُعيد الـ scheme اليدوي بعد إصلاح السبب الجذري الفعلي.
+schemes:
+  PoetryMeterApp:
+    build:
+      targets:
+        PoetryMeterApp: all
+        PoetryMeterAppTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - PoetryMeterAppTests
+    archive:
+      config: Release
