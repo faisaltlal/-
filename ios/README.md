@@ -1,5 +1,7 @@
 # Poetry Meter (اسم Placeholder) — تطبيق iOS لوزن الشعر النبطي
 
+[![iOS CI](https://github.com/faisaltlal/-/actions/workflows/ci.yml/badge.svg)](https://github.com/faisaltlal/-/actions/workflows/ci.yml)
+
 تطبيق iOS Native (Swift + SwiftUI) يحلّل بيتًا شعريًا نبطيًا ويعرض بحره وطاروقه وتفعيلاته وتقطيعه العروضي ونمطه الرقمي وقافيته — بمحرك تحليل عروضي **محلي بالكامل (Offline)**، بلا أي اتصال شبكة مطلوب للوظيفة الأساسية.
 
 > **حالة الهوية:** الاسم "Poetry Meter" واللوقو والألوان جميعها Placeholder مؤقت. غيّرها لاحقًا من `AppConfig.swift` (الاسم) و`project.yml` (`APP_DISPLAY_NAME`, `PRODUCT_BUNDLE_IDENTIFIER`) و`Assets.xcassets/AppIcon.appiconset` (الأيقونة).
@@ -95,7 +97,14 @@ swift run poetry-compare "<بيت الشعر>" [اسم-البحر-المتوقَ
 | **Beta** | أرشفة TestFlight | لا تظهر |
 | **Release** | App Store | لا تظهر |
 
-## إنشاء Build لِـ TestFlight
+## CI/CD (GitHub Actions)
+
+- **`ci.yml`**: يبني ويختبر `PoetryEngine` و`PoetryMeterApp` تلقائيًا على كل push وPull Request لـ `main` (macOS runner)، ثم يبني نسخة Simulator ويرفعها لـ **Appetize.io** لتجربة تفاعلية عبر أي متصفح (بما فيها تابلت بلا Mac) — الرابط يظهر في ملخّص الـ run على تبويب Actions.
+- **`deploy.yml`**: يعمل فقط عند نشر **GitHub Release** جديد؛ يعيد الاختبار ثم يبني أرشيفًا موقَّعًا ويرفعه تلقائيًا إلى **TestFlight** عبر Fastlane وApp Store Connect API Key.
+
+**راجع `CI_CD.md` لدليل الإعداد الكامل خطوة بخطوة**: كيف تنشئ حساب Appetize مجانيًا، وكيف تحصل على شهادة توزيع Apple وProvisioning Profile وApp Store Connect API Key (بلا حاجة لجهاز Mac فعلي — عبر `openssl` والمتصفح فقط)، وأين تضيف كل قيمة كـ GitHub Secret أو Variable بالضبط.
+
+للأرشفة يدويًا محليًا (بديل، إن رغبت في عدم استخدام الـ pipeline):
 
 ```bash
 cd ios/PoetryMeterApp
@@ -114,9 +123,7 @@ xcodebuild -exportArchive \
   -exportPath build/export
 ```
 
-قبل ذلك، عدِّل `ExportOptions.plist` وضع `teamID` الفعلي لحسابك في Apple Developer، وتأكَّد من ضبط Signing (Automatic أو Manual مع Provisioning Profile صحيح) داخل Xcode أولًا مرة واحدة. الرفع لـ TestFlight يتم بعدها عبر Xcode Organizer أو `xcrun altool`/Transporter، ثم توزيعه على مختبري Beta من App Store Connect مباشرة — لا حاجة لأي نظام حسابات داخل التطبيق نفسه.
-
-سير العمل الكامل: **Claude Code → Xcode (بناء واختبار محلي) → Archive (Beta) → App Store Connect → TestFlight → مختبرو Beta → ملاحظات/تقارير أعطال (Crashlytics) → إصلاح → نسخة TestFlight جديدة.**
+سير العمل الكامل: **Claude Code → GitHub Actions CI (بناء واختبار + Appetize) → GitHub Release → GitHub Actions Deploy (أرشفة موقَّعة + رفع TestFlight) → مختبرو Beta → ملاحظات/تقارير أعطال (Crashlytics) → إصلاح → Release جديد.**
 
 ## التعريب (Localization)
 
