@@ -1,0 +1,133 @@
+name: iOS CI
+
+# يبني ويختبر محرك الوزن (Swift Package) وتطبيق SwiftUI معًا على كل push وكل Pull Request للفرع الرئيسي.
+# أي خطأ compile أو اختبار فاشل يوقف الـ job فورًا (سلوك GitHub Actions الافتراضي: أي خطوة تُرجع كودًا
+# غير صفري تُفشل الـ job وتوقف تنفيذ الخطوات التالية، بلا أي `continue-on-error` هنا).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: macos-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # لا نُثبِّت إصدار Xcode بالرقم عمدًا: أرقام Xcode المتوفرة على صور macOS runners تتغيّر بمرور الوقت
+      # (راجع troubleshooting note في ios/CI_CD.md)، فنعتمد على الإصدار الافتراضي المُختار مسبقًا على
+      # الـ runner نفسه (عادة أحدث إصدار مستقر غير Beta)، ونطبعه هنا فقط للتوثيق في السجلّ.
+      - name: Show toolchain versions
+        run: |
+          xcodebuild -version
+          swift --version
+
+      # --- محرك الوزن: Swift Package مستقل، يُبنى ويُختبر بمعزل تام عن Xcode/iOS ---
+      - name: swift build (PoetryEngine)
+        working-directory: ios/PoetryEngine
+        run: swift build
+
+      - name: swift test (PoetryEngine)
+        working-directory: ios/PoetryEngine
+        run: swift test --parallel
+
+      # --- تطبيق iOS: يحتاج توليد .xcodeproj عبر XcodeGen أولًا (غير مرفوع لـ Git عمدًا) ---
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        working-directory: ios/PoetryMeterApp
+        run: xcodegen generate
+
+      # تشخيصية: تطبع محتوى الـ scheme المولَّد فعليًا في السجلّ، حتى يمكن تتبّع أي مشكلة توقيع/اختبار
+      # مستقبلية من سجلّ الـ run مباشرة بدل التخمين الأعمى.
+      - name: Show generated scheme (debug)
+        working-directory: ios/PoetryMeterApp
+        run: find PoetryMeterApp.xcodeproj -name "*.xcscheme" -print -exec cat {} \;
+
+      - name: Resolve an available iOS Simulator
+        id: simulator
+        run: |
+          set -euo pipefail
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import json,sys; data=json.load(sys.stdin); print(next((d['udid'] for rt,devs in data['devices'].items() if 'iOS' in rt for d in devs if d['name'].startswith('iPhone')), ''))")
+          if [ -z "$UDID" ]; then
+            echo "لم يُعثر على أي محاكي iPhone متاح على هذا الـ runner" >&2
+            exit 1
+          fi
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+          echo "سيُستخدم المحاكي: $UDID"
+
+      # نستخدم أمر "test" الواحد (بدل build-for-testing + test-without-building منفصلَين) عن قصد:
+      # المحاولة الأولى بخطوتين فشلت بخطأ "Scheme ... is not currently configured for the
+      # test-without-building action" لأن كل استدعاء xcodebuild منفصل قد يحسب مسار DerivedData
+      # مختلفًا، فلا يجد test-without-building ملفات .xctestrun التي أنتجها الاستدعاء السابق.
+      # أمر test الواحد يبني ويختبر في نفس العملية، فيتفادى المشكلة تمامًا.
+      - name: xcodebuild test
+        working-directory: ios/PoetryMeterApp
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project PoetryMeterApp.xcodeproj \
+            -scheme PoetryMeterApp \
+            -configuration Debug \
+            -destination "id=${{ steps.simulator.outputs.udid }}"
+
+      # --- نسخة تفاعلية للتجربة عبر المتصفح (Appetize.io) — راجع ios/CI_CD.md لإعداد الحساب والمفتاح ---
+      # لا يوجد `if:` هنا عمدًا: هذه الخطوة تُنفَّذ فقط إذا نجحت كل الخطوات السابقة (بناء واختبار) —
+      # لا معنى لرفع نسخة تفاعلية من كود لم يجتز الاختبارات بعد.
+      - name: Build .app for Simulator (Appetize)
+        working-directory: ios/PoetryMeterApp
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project PoetryMeterApp.xcodeproj \
+            -scheme PoetryMeterApp \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination "generic/platform=iOS Simulator" \
+            -derivedDataPath build
+
+          APP_PATH=$(find build/Build/Products -maxdepth 2 -name "*.app" -print -quit)
+          echo "APP_PATH=$APP_PATH" >> "$GITHUB_ENV"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" PoetryMeterApp.zip
+
+      - name: Upload build to Appetize.io
+        if: ${{ env.APP_PATH != '' }}
+        env:
+          APPETIZE_API_TOKEN: ${{ secrets.APPETIZE_API_TOKEN }}
+        working-directory: ios/PoetryMeterApp
+        run: |
+          set -euo pipefail
+          if [ -z "${APPETIZE_API_TOKEN:-}" ]; then
+            echo "⚠️ لم يُضبط السر APPETIZE_API_TOKEN — تخطّي الرفع لـ Appetize (اختياري). راجع ios/CI_CD.md."
+            exit 0
+          fi
+
+          RESPONSE=$(curl -sS -X POST https://api.appetize.io/v1/apps \
+            -u "${APPETIZE_API_TOKEN}:" \
+            -F "file=@PoetryMeterApp.zip" \
+            -F "platform=ios" \
+            -F "note=CI build from ${{ github.sha }}")
+
+          echo "$RESPONSE"
+          PUBLIC_URL=$(echo "$RESPONSE" | python3 -c "import json,sys; print(json.load(sys.stdin).get('publicURL','-'))")
+
+          {
+            echo "### 📱 نسخة تفاعلية على Appetize.io"
+            echo ""
+            echo "افتح هذا الرابط من أي متصفح (بما فيها التابلت) لتجربة التطبيق مباشرة:"
+            echo ""
+            echo "**${PUBLIC_URL}**"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,6 @@
+# يُقرأ معرِّف الحزمة ومعرِّف الفريق من متغيّرات بيئة يضبطها workflow النشر (deploy.yml) من
+# GitHub Actions Variables — لا قيم حقيقية مكتوبة هنا، ولا حاجة لتعديل هذا الملف يدويًا.
+# راجع ../../CI_CD.md لشرح من أين تحصل على APP_BUNDLE_IDENTIFIER وTEAM_ID.
+
+app_identifier(ENV["APP_BUNDLE_IDENTIFIER"])
+team_id(ENV["TEAM_ID"])

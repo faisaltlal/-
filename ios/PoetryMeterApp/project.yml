@@ -1,0 +1,118 @@
+# مواصفة XcodeGen لإنشاء مشروع Xcode فعلي (.xcodeproj) من هذا الملف.
+# لماذا XcodeGen بدل كتابة project.pbxproj يدويًا؟ ملف pbxproj بنية معقّدة عرضة للتلف عند التحرير اليدوي
+# بلا Xcode للتحقق منه فوريًا؛ XcodeGen يولّده بشكل صحيح ومضمون من مواصفة YAML بسيطة ومقروءة.
+#
+# التشغيل (على Mac فيه Xcode مثبَّت):
+#   brew install xcodegen
+#   cd ios/PoetryMeterApp
+#   xcodegen generate
+#   open PoetryMeterApp.xcodeproj
+#
+# راجع ../README.md لتفاصيل الإعداد الكاملة.
+
+name: PoetryMeterApp
+options:
+  bundleIdPrefix: com.placeholder
+  deploymentTarget:
+    iOS: "16.0"
+  developmentLanguage: ar
+
+configs:
+  Debug: debug
+  Beta: release
+  Release: release
+
+packages:
+  PoetryEngine:
+    path: ../PoetryEngine
+
+targets:
+  PoetryMeterApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: Sources
+      - path: Resources
+        buildPhase: resources
+        # Info.plist يُعالَج عبر مفتاح info.path أدناه (ProcessInfoPlistFile)؛ استبعاده هنا يمنع
+        # نسخه أيضًا كمورد عادي (Copy Bundle Resources)، وإلا يتعارض الإخراجان على نفس الملف الناتج
+        # بخطأ "Multiple commands produce .../Info.plist".
+        excludes:
+          - "Info.plist"
+    dependencies:
+      - package: PoetryEngine
+    info:
+      path: Resources/Info.plist
+      properties:
+        CFBundleDisplayName: "$(APP_DISPLAY_NAME)"
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.placeholder.poetrymeter
+        # عمدًا لا نُخصِّص PRODUCT_NAME هنا (يبقى $(TARGET_NAME) الافتراضي، أي "PoetryMeterApp.app").
+        # أول محاولة ربطت PRODUCT_NAME بـ APP_DISPLAY_NAME (يتغيّر حسب الإعداد: "Poetry Meter (Debug)"
+        # إلخ)، فأصبح اسم الحزمة الناتجة مختلفًا عن الاسم الذي يفترضه Xcode تلقائيًا عند حساب TEST_HOST
+        # لاختبار الوحدة المضيَّف (Hosted Unit Test) — فشل البناء بخطأ "Could not find test host".
+        # الاسم الظاهر للمستخدم مضبوط بشكل صحيح ومنفصل عبر CFBundleDisplayName أدناه.
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ENABLE_PREVIEWS: YES
+        DEVELOPMENT_ASSET_PATHS: ""
+      configs:
+        Debug:
+          APP_DISPLAY_NAME: "Poetry Meter (Debug)"
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "DEBUG"
+        Beta:
+          APP_DISPLAY_NAME: "Poetry Meter (Beta)"
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "BETA"
+        Release:
+          APP_DISPLAY_NAME: "Poetry Meter"
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: ""
+
+  PoetryMeterAppTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: Tests
+    dependencies:
+      - target: PoetryMeterApp
+      - package: PoetryEngine
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.placeholder.poetrymeter.tests
+        SWIFT_VERSION: "5.9"
+        # بلا هذا، فشل التوقيع بخطأ "Cannot code sign because the target does not have an
+        # Info.plist file" — لا يوجد ملف Info.plist مكتوب يدويًا لهدف الاختبار (لا حاجة له أصلًا)،
+        # فنطلب من Xcode توليده تلقائيًا كما أوصى الخطأ نفسه.
+        GENERATE_INFOPLIST_FILE: YES
+
+# نُعرِّف scheme صراحة: جُرِّب الاعتماد على التوليد التلقائي لـ XcodeGen (بلا هذا القسم) في محاولة سابقة،
+# فتبيَّن أن الـ scheme الناتج تلقائيًا لا يُدرج PoetryMeterAppTests في إجراء الاختبار إطلاقًا
+# ("Scheme PoetryMeterApp is not currently configured for the test action"). الخطأ الأقدم
+# ("Could not find test host") لم يكن سببه هذا الـ scheme اليدوي، بل تعارض PRODUCT_NAME مع
+# APP_DISPLAY_NAME (أُصلح أعلاه) — لذلك نُعيد الـ scheme اليدوي بعد إصلاح السبب الجذري الفعلي.
+schemes:
+  PoetryMeterApp:
+    build:
+      targets:
+        PoetryMeterApp: all
+        PoetryMeterAppTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - PoetryMeterAppTests
+    archive:
+      config: Release
