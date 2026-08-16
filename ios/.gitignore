@@ -1,0 +1,18 @@
+# Xcode / SwiftPM
+**/*.xcodeproj/
+**/.build/
+**/DerivedData/
+**/xcuserdata/
+**/*.xcworkspace/xcuserdata/
+**/.swiftpm/
+
+# أسرار Firebase — لا تُرفع أبدًا لـ Git. راجع README.md قسم "إعداد Firebase" لطريقة إضافته محليًا.
+**/GoogleService-Info.plist
+
+# نواتج الأرشفة والتوقيع
+**/*.ipa
+**/*.xcarchive
+**/*.dSYM.zip
+**/ExportOptions-local.plist
+
+.DS_Store
