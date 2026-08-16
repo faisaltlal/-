@@ -25,10 +25,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: "16.2"
+      # لا نُثبِّت إصدار Xcode بالرقم عمدًا (راجع troubleshooting note في ios/CI_CD.md) — نعتمد على
+      # الإصدار الافتراضي على الـ runner نفسه.
 
       - name: swift test (PoetryEngine)
         working-directory: ios/PoetryEngine
@@ -49,10 +47,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: "16.2"
+      # لا نُثبِّت إصدار Xcode بالرقم عمدًا (راجع troubleshooting note في ios/CI_CD.md) — نعتمد على
+      # الإصدار الافتراضي على الـ runner نفسه.
 
       - name: Verify required secrets and variables are set
         run: |

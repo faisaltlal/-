@@ -26,11 +26,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: "16.2"
-
+      # لا نُثبِّت إصدار Xcode بالرقم عمدًا: أرقام Xcode المتوفرة على صور macOS runners تتغيّر بمرور الوقت
+      # (راجع troubleshooting note في ios/CI_CD.md)، فنعتمد على الإصدار الافتراضي المُختار مسبقًا على
+      # الـ runner نفسه (عادة أحدث إصدار مستقر غير Beta)، ونطبعه هنا فقط للتوثيق في السجلّ.
       - name: Show toolchain versions
         run: |
           xcodebuild -version
