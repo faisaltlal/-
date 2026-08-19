@@ -177,13 +177,23 @@ public struct EngineData: Sendable {
     public let goldenPhonology: [GoldenPhonologyCase]
 
     /// يحمّل البيانات من موارد الحزمة.
+    ///
+    /// نبني المسار بأنفسنا بدل `Bundle.url(forResource:withExtension:)`.
+    /// السبب ليس ذوقًا: تلك الدالة تعبر جسر NSString في Foundation على
+    /// لينكس، وتمرير نصّ حرفي إليها («json» و«Resources») أسقط اختبارات
+    /// CI بـ «Constant strings cannot be deallocated». المسارات هنا
+    /// نصوص مبنيّة بالاستيفاء لا حرفية، فلا تمرّ بذلك الجسر.
     public static func bundled() throws -> EngineData {
-        func load<T: Decodable>(_ name: String, as: T.Type) throws -> T {
-            guard let url = Bundle.module.url(forResource: name, withExtension: "json", subdirectory: "Resources")
-                ?? Bundle.module.url(forResource: name, withExtension: "json") else {
-                throw EngineError.missingResource(name)
+        let base = Bundle.module.resourcePath ?? Bundle.module.bundlePath
+        let fm = FileManager.default
+
+        func load<T: Decodable>(_ name: String, as type: T.Type) throws -> T {
+            let file = name + ".json"
+            for path in ["\(base)/Resources/\(file)", "\(base)/\(file)"] where fm.fileExists(atPath: path) {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path))
+                return try JSONDecoder().decode(type, from: data)
             }
-            return try JSONDecoder().decode(T.self, from: Data(contentsOf: url))
+            throw EngineError.missingResource(name)
         }
 
         let t: TafaeelFile = try load("tafaeel", as: TafaeelFile.self)
