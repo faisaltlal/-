@@ -83,6 +83,65 @@ public struct NormalizedText: Sendable {
     public let vocalizationCoverage: Double
 }
 
+/// أدوات نصّية خالصة.
+///
+/// مكتوبة يدويًا عمدًا بدل `trimmingCharacters` و`components(separatedBy:)`:
+/// تلك تعبر جسر NSString في Foundation على لينكس، وقد أسقطت الاختبارات
+/// هناك بـ «Constant strings cannot be deallocated» عند تمرير نصّ حرفي.
+/// المحرك لا يحتاج Foundation إلا لفكّ ترميز JSON، فأبقيناها هناك وحدها.
+enum PureText {
+    static func trim(_ s: String) -> String {
+        var scalars = Array(s.unicodeScalars)
+        while let f = scalars.first, isSpace(f) { scalars.removeFirst() }
+        while let l = scalars.last, isSpace(l) { scalars.removeLast() }
+        var view = String.UnicodeScalarView()
+        for c in scalars { view.append(c) }
+        return String(view)
+    }
+
+    static func isSpace(_ s: Unicode.Scalar) -> Bool {
+        s == " " || s == "\t" || s == "\n" || s == "\r"
+    }
+
+    /// تقسيم على فاصل نصّي، بلا Foundation.
+    static func split(_ s: String, by separator: String) -> [String] {
+        guard !separator.isEmpty else { return [s] }
+        let hay = Array(s.unicodeScalars)
+        let needle = Array(separator.unicodeScalars)
+        var out: [String] = []
+        var current = String.UnicodeScalarView()
+        var i = 0
+        while i < hay.count {
+            if i + needle.count <= hay.count,
+               Array(hay[i..<(i + needle.count)]) == needle {
+                out.append(String(current))
+                current = String.UnicodeScalarView()
+                i += needle.count
+            } else {
+                current.append(hay[i])
+                i += 1
+            }
+        }
+        out.append(String(current))
+        return out
+    }
+
+    static func splitLines(_ s: String) -> [String] {
+        var out: [String] = []
+        var current = String.UnicodeScalarView()
+        for c in s.unicodeScalars {
+            if c == "\n" || c == "\r" {
+                out.append(String(current))
+                current = String.UnicodeScalarView()
+            } else {
+                current.append(c)
+            }
+        }
+        out.append(String(current))
+        return out
+    }
+}
+
 public enum TextNormalizer {
     private static let punctuation: Set<Unicode.Scalar> = [
         ".", ",", ";", ":", "!", "?", "\"", "'", "«", "»", "(", ")",
@@ -115,10 +174,10 @@ public enum TextNormalizer {
         if punctCount > 0 { removed.append(.init(what: "الترقيم", why: "أُبدل بفراغ حفاظًا على حدود الكلمات", count: punctCount)) }
         if foreignCount > 0 { removed.append(.init(what: "رموز غير عربية", why: "لا تمثّل أصواتًا عربية", count: foreignCount)) }
 
-        let text = String(String.UnicodeScalarView(out))
+        let words = String(out)
             .split(separator: " ", omittingEmptySubsequences: true)
-            .joined(separator: " ")
-        let words = text.isEmpty ? [] : text.split(separator: " ").map(String.init)
+            .map(String.init)
+        let text = words.joined(separator: " ")
 
         var letters = 0
         var marks = 0
@@ -136,19 +195,17 @@ public enum TextNormalizer {
 
     /// يقسم على الفاصل الصريح فقط — لا تخمين لموضع القسمة.
     public static func splitHemistichs(_ raw: String) -> (parts: [String], explicit: Bool) {
-        let markers = ["...", "…", "**", "*", "||", "|", "--", "\t"]
+        let markers = ["...", "\u{2026}", "**", "*", "||", "|", "--", "\t"]
         var pieces = [raw]
         for m in markers where raw.contains(m) {
-            pieces = pieces.flatMap { $0.components(separatedBy: m) }
+            pieces = pieces.flatMap { PureText.split($0, by: m) }
         }
-        let cleaned = pieces.map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
+        let cleaned = pieces.map { PureText.trim($0) }.filter { !$0.isEmpty }
         return (cleaned, cleaned.count > 1)
     }
 
     public static func splitLines(_ raw: String) -> [String] {
-        raw.components(separatedBy: .newlines)
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-            .filter { !$0.isEmpty }
+        PureText.splitLines(raw).map { PureText.trim($0) }.filter { !$0.isEmpty }
     }
 }
 
@@ -253,7 +310,9 @@ public struct Phonemizer: Sendable {
         for (w, original) in words.enumerated() {
             let isLastWord = w == words.count - 1
             var surface = original
-            let bare = String(String.UnicodeScalarView(original.unicodeScalars.filter { !Ar.isDiacritic($0) }))
+            var bareView = String.UnicodeScalarView()
+            for c in original.unicodeScalars where !Ar.isDiacritic(c) { bareView.append(c) }
+            let bare = String(bareView)
 
             if let rep = unwritten[bare] {
                 trace.append("unwrittenLongVowel: \(bare) ← \(rep)")

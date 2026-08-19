@@ -103,7 +103,7 @@ public struct MeterRegistry: Sendable {
 
     public func find(_ nameOrId: String) -> Meter? {
         if let m = byId[nameOrId] { return m }
-        let needle = nameOrId.trimmingCharacters(in: .whitespaces)
+        let needle = PureText.trim(nameOrId)
         return meters.first { $0.name == needle || $0.aliases.contains(needle) }
     }
 }
