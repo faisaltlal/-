@@ -46,17 +46,27 @@ jobs:
   swift:
     name: Swift — حزمة المحرك
     runs-on: ubuntu-latest
-    container: swift:5.9
+    # صورة 5.9 أسقطت الاختبارات كلها داخل Foundation قبل أول تأكيد
+    # («Constant strings cannot be deallocated»)، والبناء ينجح فيها.
+    container: swift:6.0
     steps:
       - uses: actions/checkout@v4
 
       - name: البناء
         working-directory: nabati/swift
-        run: swift build -v
+        run: swift build
 
+      # الانهيار داخل Foundation يبتلع مخرجات XCTest، فنحفظها ونعرض
+      # السطور الدالّة عند الفشل بدل أن نقرأ تفريغ المسجّلات.
       - name: الاختبارات
         working-directory: nabati/swift
-        run: swift test -v
+        run: |
+          set -o pipefail
+          swift test 2>&1 | tee test-output.txt || {
+            echo "───────── السطور الدالّة ─────────"
+            grep -nE "Test Case|Fatal error|error:|XCTAssert|failed" test-output.txt | tail -40
+            exit 1
+          }
 
   parity:
     name: تطابق التنفيذين
