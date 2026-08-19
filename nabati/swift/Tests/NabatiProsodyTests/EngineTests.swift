@@ -59,14 +59,14 @@ final class EngineTests: XCTestCase {
         let engine = try makeEngine()
         let units = engine.syllabify("مَدَّ").units
         XCTAssertEqual(units.count, 3, "م + د ساكنة + د متحركة")
-        XCTAssertEqual(units[1].vowel.knownLength, .none)
+        XCTAssertTrue(units[1].vowel.isSilent, "الأول من المشدّد ساكن")
     }
 
     func testTanweenBecomesNoon() throws {
         let engine = try makeEngine()
         let units = engine.syllabify("كِتَابٌ").units
         XCTAssertEqual(units.last?.consonant, Ar.noon)
-        XCTAssertEqual(units.last?.vowel.knownLength, .none)
+        XCTAssertEqual(units.last?.vowel.isSilent, true)
     }
 
     func testSunLetterDropsLam() throws {

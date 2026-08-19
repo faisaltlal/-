@@ -58,8 +58,10 @@ jobs:
 
       # الانهيار داخل Foundation يبتلع مخرجات XCTest، فنحفظها ونعرض
       # السطور الدالّة عند الفشل بدل أن نقرأ تفريغ المسجّلات.
+      # صورة swift تشغّل sh (dash) افتراضيًا، ولا pipefail فيها.
       - name: الاختبارات
         working-directory: nabati/swift
+        shell: bash
         run: |
           set -o pipefail
           swift test 2>&1 | tee test-output.txt || {

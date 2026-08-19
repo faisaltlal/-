@@ -225,6 +225,14 @@ public enum VowelSpec: Sendable, Equatable {
         return nil
     }
 
+    /// ساكن يقينًا. خاصية مستقلة عمدًا: `knownLength == .none` تلتبس
+    /// بـ `Optional.none` فتعني «مجهول» بدل «ساكن»، وهو عكس المراد
+    /// تمامًا. المترجم يحذّر منها ولا يمنعها.
+    public var isSilent: Bool {
+        if case .known(let l, _) = self { return l == .none }
+        return false
+    }
+
     public func allows(_ l: Length) -> Bool {
         switch self {
         case .known(let k, _): return k == l
@@ -419,7 +427,7 @@ public struct Phonemizer: Sendable {
                 // المدّ
                 var suppressNext = false
                 var consumedMater = false
-                if i + 1 < letters.count, vowel.knownLength != VowelSpec.Length.none {
+                if i + 1 < letters.count, !vowel.isSilent {
                     let next = letters[i + 1]
                     if !Ar.hamzaForms.contains(next.ch), let q = materQuality(next.ch),
                        !hasOwnVowel(next), !isSilentAlefOfJamaa(letters, i + 1) {

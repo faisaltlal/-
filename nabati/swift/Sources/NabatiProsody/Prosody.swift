@@ -78,7 +78,7 @@ public enum SyllableParser {
     /// وهذا هو الوصل نفسه: «في البيت» تُنطق فِلْ‑بَيْت.
     private static func codaAllowed(onset: PhonUnit, coda: PhonUnit, startsWord: Bool) -> Bool {
         if coda.word == onset.word { return true }
-        return startsWord && coda.vowel.knownLength == .none
+        return startsWord && coda.vowel.isSilent
     }
 
     public static func buildDag(_ units: [PhonUnit], ishbaa: Bool = true) -> SyllableDag {
