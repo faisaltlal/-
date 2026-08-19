@@ -31,6 +31,11 @@ jobs:
         working-directory: nabati
         run: node tools/bundle-data.js --check
 
+      # الملف الواحد يحزم نفس ملفات المحرك، فلا يجوز أن ينحرف عنها.
+      - name: الملف الواحد محدَّث
+        working-directory: nabati
+        run: node tools/build-standalone.js --check
+
       - name: الاختبارات
         working-directory: nabati
         run: node tests/run.js

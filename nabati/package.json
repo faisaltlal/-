@@ -5,8 +5,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "bundle": "node tools/bundle-data.js",
-    "check-bundle": "node tools/bundle-data.js --check",
+    "bundle": "node tools/bundle-data.js && node tools/build-standalone.js",
+    "check-bundle": "node tools/bundle-data.js --check && node tools/build-standalone.js --check",
     "test": "node tests/run.js"
   },
   "engines": { "node": ">=18" }

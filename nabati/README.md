@@ -18,8 +18,15 @@ https://faisaltlal.github.io/-/nabati/web/
 يعمل كاملًا داخل متصفحك: لا خادم، ولا شبكة، ولا يُرسَل نصّك إلى أي
 مكان. يعمل على الآيفون والتابلت بلا تثبيت شيء.
 
-قبل الدمج في `main`، لمعاينة الفرع:
-[raw.githack](https://raw.githack.com/faisaltlal/-/claude/nabati-poetry-engine-t6pksi/nabati/web/index.html)
+### ملف واحد مكتفٍ بذاته
+
+`web/standalone.html` — المحرك كله (١٢٩ كيلوبايت) في ملف HTML واحد:
+لا استيراد وحدات، ولا ملفات جانبية، ولا إنترنت. حمّله وافتحه من أي
+مكان، أو مرّره عبر أي خدمة معاينة. مفيد قبل أن يصير للمشروع موقع
+منشور، ومجرَّب فعليًا من `file://` بلا خادم.
+
+يُولَّد من ملفات المحرك نفسها بـ `node tools/build-standalone.js`،
+وCI يفشل إن تأخّر عنها — فلا يمكن أن ينحرف.
 
 📱 **تفاصيل العمل من تابلت وآيفون:** [`docs/RUNNING-FROM-A-TABLET.md`](docs/RUNNING-FROM-A-TABLET.md)
 
