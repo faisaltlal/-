@@ -1,0 +1,69 @@
+{
+  "description": "الزحافات والعلل المسموحة لكل تفعيلة. الزحاف يدخل الحشو والعروض والضرب (scope=any)؛ العلة لا تدخل إلا العروض والضرب (scope=arud_darb). التكلفة الفعلية تأتي من scoring.json حسب kind و severity — لا أرقام مبعثرة هنا.",
+  "legend": {
+    "kind": {
+      "salim": "التفعيلة تامة",
+      "zihaf": "زحاف — تغيير في الأسباب، جائز في الحشو",
+      "illa": "علة — لازمة في العروض والضرب وحدهما",
+      "ambiguous_reading": "قراءتان مشروعتان لرسم واحد غير مشكول — ليست عيبًا"
+    },
+    "scope": { "any": "الحشو والعروض والضرب", "arud_darb": "العروض والضرب فقط" },
+    "severity": { "1": "شائع", "2": "نادر أو ثقيل" },
+    "X": "مقطع مفرط الطول (CVVC/CVCC) — لا يقع إلا في نهاية الشطر"
+  },
+  "variations": {
+    "mustafilun": [
+      { "id": "salim", "name": "سالم", "result": "مُسْتَفْعِلُنْ", "syllables": ["L","L","S","L"], "kind": "salim", "scope": "any", "severity": 1 },
+      { "id": "khabn", "name": "الخبن", "result": "مُتَفْعِلُنْ", "syllables": ["S","L","S","L"], "kind": "zihaf", "scope": "any", "severity": 1 },
+      { "id": "tayy", "name": "الطي", "result": "مُسْتَعِلُنْ", "syllables": ["L","S","S","L"], "kind": "zihaf", "scope": "any", "severity": 1 },
+      { "id": "khabl", "name": "الخبل", "result": "مُتَعِلُنْ", "syllables": ["S","S","S","L"], "kind": "zihaf", "scope": "any", "severity": 2 },
+      { "id": "qat", "name": "القطع", "result": "مَفْعُولُنْ", "syllables": ["L","L","L"], "kind": "illa", "scope": "arud_darb", "severity": 1 },
+      { "id": "tadhyil", "name": "التذييل", "result": "مُسْتَفْعِلَانْ", "syllables": ["L","L","S","X"], "kind": "illa", "scope": "arud_darb", "severity": 1 }
+    ],
+    "failun": [
+      { "id": "salim", "name": "سالم", "result": "فَاعِلُنْ", "syllables": ["L","S","L"], "kind": "salim", "scope": "any", "severity": 1 },
+      { "id": "khabn", "name": "الخبن", "result": "فَعِلُنْ", "syllables": ["S","S","L"], "kind": "zihaf", "scope": "any", "severity": 1 },
+      { "id": "qat", "name": "القطع", "result": "فَعْلُنْ", "syllables": ["L","L"], "kind": "illa", "scope": "arud_darb", "severity": 1 },
+      { "id": "tadhyil", "name": "التذييل", "result": "فَاعِلَانْ", "syllables": ["L","S","X"], "kind": "illa", "scope": "arud_darb", "severity": 1 }
+    ],
+    "failatun": [
+      { "id": "salim", "name": "سالم", "result": "فَاعِلَاتُنْ", "syllables": ["L","S","L","L"], "kind": "salim", "scope": "any", "severity": 1 },
+      { "id": "khabn", "name": "الخبن", "result": "فَعِلَاتُنْ", "syllables": ["S","S","L","L"], "kind": "zihaf", "scope": "any", "severity": 1 },
+      { "id": "kaff", "name": "الكف", "result": "فَاعِلَاتُ", "syllables": ["L","S","L","S"], "kind": "zihaf", "scope": "any", "severity": 1 },
+      { "id": "shakl", "name": "الشكل", "result": "فَعِلَاتُ", "syllables": ["S","S","L","S"], "kind": "zihaf", "scope": "any", "severity": 2 },
+      { "id": "hadhf", "name": "الحذف", "result": "فَاعِلُنْ", "syllables": ["L","S","L"], "kind": "illa", "scope": "arud_darb", "severity": 1 },
+      { "id": "tashith", "name": "التشعيث", "result": "مَفْعُولُنْ", "syllables": ["L","L","L"], "kind": "illa", "scope": "arud_darb", "severity": 1 },
+      { "id": "tadhyil", "name": "التذييل", "result": "فَاعِلَاتَانْ", "syllables": ["L","S","L","X"], "kind": "illa", "scope": "arud_darb", "severity": 1 }
+    ],
+    "faulun": [
+      { "id": "salim", "name": "سالم", "result": "فَعُولُنْ", "syllables": ["S","L","L"], "kind": "salim", "scope": "any", "severity": 1 },
+      { "id": "qabd", "name": "القبض", "result": "فَعُولُ", "syllables": ["S","L","S"], "kind": "zihaf", "scope": "any", "severity": 1 },
+      { "id": "hadhf", "name": "الحذف", "result": "فَعُولْ", "syllables": ["S","L"], "kind": "illa", "scope": "arud_darb", "severity": 1 },
+      { "id": "batr", "name": "البتر", "result": "فَعْ", "syllables": ["L"], "kind": "illa", "scope": "arud_darb", "severity": 2 }
+    ],
+    "mafailun": [
+      { "id": "salim", "name": "سالم", "result": "مَفَاعِيلُنْ", "syllables": ["S","L","L","L"], "kind": "salim", "scope": "any", "severity": 1 },
+      { "id": "qabd", "name": "القبض", "result": "مَفَاعِلُنْ", "syllables": ["S","L","S","L"], "kind": "zihaf", "scope": "any", "severity": 1 },
+      { "id": "kaff", "name": "الكف", "result": "مَفَاعِيلُ", "syllables": ["S","L","L","S"], "kind": "zihaf", "scope": "any", "severity": 1 },
+      { "id": "hadhf", "name": "الحذف", "result": "فَعُولُنْ", "syllables": ["S","L","L"], "kind": "illa", "scope": "arud_darb", "severity": 1 }
+    ],
+    "failun_short": [
+      { "id": "salim", "name": "فَعِلُنْ", "result": "فَعِلُنْ", "syllables": ["S","S","L"], "kind": "salim", "scope": "any", "severity": 1 },
+      { "id": "faalun_reading", "name": "قراءة فَعْلُنْ", "result": "فَعْلُنْ", "syllables": ["L","L"], "kind": "ambiguous_reading", "scope": "any", "severity": 1 },
+      { "id": "tadhyil", "name": "التذييل", "result": "فَعِلَانْ", "syllables": ["S","S","X"], "kind": "illa", "scope": "arud_darb", "severity": 1 }
+    ],
+    "faalun": [
+      { "id": "salim", "name": "سالم", "result": "فَعْلُنْ", "syllables": ["L","L"], "kind": "salim", "scope": "any", "severity": 1 }
+    ],
+    "mufaalatun": [
+      { "id": "salim", "name": "سالم", "result": "مُفَاعَلَتُنْ", "syllables": ["S","L","S","S","L"], "kind": "salim", "scope": "any", "severity": 1 },
+      { "id": "asb", "name": "العصب", "result": "مُفَاعَلْتُنْ", "syllables": ["S","L","L","L"], "kind": "zihaf", "scope": "any", "severity": 1 }
+    ],
+    "mufaalatun_source": [
+      { "id": "salim", "name": "سالم", "result": "مُفَاعَلَاتُنْ", "syllables": ["S","L","S","L","L"], "kind": "salim", "scope": "any", "severity": 1 }
+    ]
+  },
+  "openQuestions": {
+    "mufaalatun_source": "لا زحافات مسجَّلة — لأن التفعيلة نفسها غير مثبتة، واختراع زحافات لها يضاعف الخطأ. الصخري لذلك أشدّ صرامة من بقية البحور حتى يصل تحقّق. انظر OPEN-QUESTIONS.md"
+  }
+}

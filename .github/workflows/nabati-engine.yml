@@ -1,0 +1,70 @@
+name: محرك العروض النبطي
+
+# يعمل على دفع أي شيء تحت nabati/ وعلى الطلب اليدوي.
+# التشغيل اليدوي مقصود: التطوير يجري من تابلت، والزرّ في صفحة Actions
+# هو أسهل طريقة لتشغيل الاختبارات من الهاتف.
+on:
+  push:
+    paths: ['nabati/**', '.github/workflows/nabati-engine.yml']
+  pull_request:
+    paths: ['nabati/**', '.github/workflows/nabati-engine.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  javascript:
+    name: جافاسكربت — المحرك المرجعي
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # البيانات في data/*.json هي المصدر الوحيد، ولها نسختان مولَّدتان
+      # (وحدة جافاسكربت للمتصفح، وموارد حزمة Swift). هذا الفحص يمنع
+      # انحرافهما عن المصدر بصمت.
+      - name: تطابق البيانات المولَّدة مع المصدر
+        working-directory: nabati
+        run: node tools/bundle-data.js --check
+
+      - name: الاختبارات
+        working-directory: nabati
+        run: node tests/run.js
+
+      - name: التحقّق من صحة كل ملفات JSON
+        run: |
+          for f in nabati/data/*.json; do
+            node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" \
+              || { echo "✗ JSON غير صالح: $f"; exit 1; }
+            echo "✓ $f"
+          done
+
+  swift:
+    name: Swift — حزمة المحرك
+    runs-on: ubuntu-latest
+    container: swift:5.9
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: البناء
+        working-directory: nabati/swift
+        run: swift build -v
+
+      - name: الاختبارات
+        working-directory: nabati/swift
+        run: swift test -v
+
+  parity:
+    name: تطابق التنفيذين
+    runs-on: ubuntu-latest
+    needs: [javascript, swift]
+    steps:
+      - uses: actions/checkout@v4
+      - name: تذكير
+        run: |
+          echo "التنفيذان يقرآن golden_cases.json نفسه."
+          echo "نجاح المهمّتين أعلاه يعني توافقهما على كل حالة مرجعية."

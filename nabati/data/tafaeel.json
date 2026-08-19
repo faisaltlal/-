@@ -1,0 +1,105 @@
+{
+  "$schema": "./schema/tafaeel.schema.json",
+  "description": "التفعيلات. كل تفعيلة معرَّفة بنمطها المقطعي (S=مقطع قصير CV، L=مقطع طويل CVC أو CVV) وبنمطها الحرفي الخليلي (1=متحرك، 0=ساكن). النمطان مشتقّان من نطق التفعيلة نفسها، ومُتحقَّق من تطابقهما آليًا في tests/meters.test.js.",
+  "legend": {
+    "syllables": { "S": "مقطع قصير — صامت + حركة قصيرة (CV)", "L": "مقطع طويل — CVC أو CVV" },
+    "khalilLetters": { "1": "متحرك", "0": "ساكن" },
+    "status": {
+      "STANDARD": "تفعيلة خليلية موثّقة",
+      "NEEDS_VALIDATION": "وردت في المادة المصدرية لكن لم تثبت صحتها — لم تُغيَّر"
+    }
+  },
+  "tafaeel": [
+    {
+      "id": "faulun",
+      "plain": "فعولن",
+      "vocalized": "فَعُولُنْ",
+      "syllables": ["S", "L", "L"],
+      "khalilLetters": "11010",
+      "components": ["وتد مجموع", "سبب خفيف"],
+      "status": "STANDARD"
+    },
+    {
+      "id": "failun",
+      "plain": "فاعلن",
+      "vocalized": "فَاعِلُنْ",
+      "syllables": ["L", "S", "L"],
+      "khalilLetters": "10110",
+      "components": ["سبب خفيف", "وتد مجموع"],
+      "status": "STANDARD"
+    },
+    {
+      "id": "mafailun",
+      "plain": "مفاعيلن",
+      "vocalized": "مَفَاعِيلُنْ",
+      "syllables": ["S", "L", "L", "L"],
+      "khalilLetters": "1101010",
+      "components": ["وتد مجموع", "سبب خفيف", "سبب خفيف"],
+      "status": "STANDARD"
+    },
+    {
+      "id": "mustafilun",
+      "plain": "مستفعلن",
+      "vocalized": "مُسْتَفْعِلُنْ",
+      "syllables": ["L", "L", "S", "L"],
+      "khalilLetters": "1010110",
+      "components": ["سبب خفيف", "سبب خفيف", "وتد مجموع"],
+      "status": "STANDARD"
+    },
+    {
+      "id": "failatun",
+      "plain": "فاعلاتن",
+      "vocalized": "فَاعِلَاتُنْ",
+      "syllables": ["L", "S", "L", "L"],
+      "khalilLetters": "1011010",
+      "components": ["سبب خفيف", "وتد مجموع", "سبب خفيف"],
+      "status": "STANDARD"
+    },
+    {
+      "id": "failun_short",
+      "plain": "فعلن",
+      "vocalized": "فَعِلُنْ",
+      "syllables": ["S", "S", "L"],
+      "khalilLetters": "1110",
+      "components": ["فاصلة صغرى"],
+      "status": "STANDARD",
+      "note": "المخبونة. الرسم «فعلن» يحتمل أيضًا فَعْلُنْ — انظر faalun."
+    },
+    {
+      "id": "faalun",
+      "plain": "فعلن",
+      "vocalized": "فَعْلُنْ",
+      "syllables": ["L", "L"],
+      "khalilLetters": "1010",
+      "components": ["سبب خفيف", "سبب خفيف"],
+      "status": "STANDARD",
+      "note": "المقطوعة. نفس رسم فَعِلُنْ غير مشكولًا — التمييز بينهما variation لا تفعيلتان منفصلتان في المطابقة."
+    },
+    {
+      "id": "mufaalatun",
+      "plain": "مفاعلتن",
+      "vocalized": "مُفَاعَلَتُنْ",
+      "syllables": ["S", "L", "S", "S", "L"],
+      "khalilLetters": "1101110",
+      "components": ["وتد مجموع", "فاصلة صغرى"],
+      "status": "STANDARD",
+      "note": "غير مستعملة في أي بحر من مصدرنا — مُدرجة لأنها أحد المرشحَين لتصحيح «مفاعلاتن»."
+    },
+    {
+      "id": "mufaalatun_source",
+      "plain": "مفاعلاتن",
+      "vocalized": "مُفَاعَلَاتُنْ",
+      "syllables": ["S", "L", "S", "L", "L"],
+      "khalilLetters": "11011010",
+      "components": ["وتد مجموع", "وتد مجموع", "سبب خفيف"],
+      "status": "NEEDS_VALIDATION",
+      "sourceQuote": "الصخري: مفاعلاتن | مفاعلاتن | فعولن",
+      "validation": {
+        "issue": "ثمانية أحرف. لا تفعيلة خليلية تتجاوز سبعة.",
+        "candidates": ["mufaalatun", "mafailun"],
+        "resolvedBy": "بيت صخري واحد حقيقي مع تقطيعه من تطبيق ميزان النبط",
+        "action": "مُبقاة كما وردت حرفيًا في المصدر. لم يُغيَّر شيء."
+      }
+    }
+  ]
+}

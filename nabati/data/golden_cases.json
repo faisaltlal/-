@@ -1,0 +1,184 @@
+{
+  "description": "حالات مرجعية للمحرك نفسه، لا لواجهة أي تطبيق. كل حالة مستقلة وقابلة للتشغيل وحدها.",
+  "conventions": {
+    "syllables": "S قصير، L طويل، X مفرط الطول",
+    "source": "hand_verified = قطّعتُها يدويًا بقواعد العروض قبل تشغيل المحرك | app = من تطبيق ميزان النبط | derived = مشتقّة من البيانات نفسها",
+    "note": "أي حالة مصدرها app لم تُضَف بعد — لم يُقدَّم شيء منها. القسم pending يبيّن ما ينقص."
+  },
+  "phonology": [
+    {
+      "id": "shadda_splits",
+      "title": "المشدّد ساكن + متحرك",
+      "input": "مَدَّ",
+      "expectSyllables": [
+        "L",
+        "L"
+      ],
+      "why": "مَدْ + دَ، والفتحة الأخيرة تُشبَع في آخر الشطر",
+      "source": "hand_verified"
+    },
+    {
+      "id": "tanween_is_noon",
+      "title": "التنوين نون ساكنة",
+      "input": "كِتَابٌ",
+      "expectSyllables": [
+        "S",
+        "L",
+        "L"
+      ],
+      "why": "كِ + تَا + بُنْ — وهي بعينها فَعُولُنْ",
+      "source": "hand_verified"
+    },
+    {
+      "id": "lam_shamsiyya",
+      "title": "اللام الشمسية لا تُنطق والحرف بعدها مشدّد",
+      "input": "الشَّمْسُ",
+      "expectSyllables": [
+        "L",
+        "L",
+        "L"
+      ],
+      "why": "أَشْ + شَمْ + سُ ← ثلاثة مقاطع، وإشباع الضمة يجعل الأخير طويلًا",
+      "source": "hand_verified"
+    },
+    {
+      "id": "lam_qamariyya",
+      "title": "اللام القمرية تُنطق",
+      "input": "الْقَمَرُ",
+      "expectSyllables": [
+        "L",
+        "S",
+        "S",
+        "L"
+      ],
+      "why": "أَلْ + قَ + مَ + رُ ← الميم مفتوحة مقطعًا مفتوحًا، والراء تُشبَع",
+      "source": "hand_verified"
+    },
+    {
+      "id": "madd_letters",
+      "title": "حروف المدّ تُطيل المقطع",
+      "input": "قَالُوا",
+      "expectSyllables": [
+        "L",
+        "L"
+      ],
+      "why": "قَا + لُو، وألف التفريق غير منطوقة",
+      "source": "hand_verified"
+    },
+    {
+      "id": "silent_alef_jamaa",
+      "title": "ألف التفريق لا تُحتسب",
+      "input": "كَتَبُوا",
+      "expectSyllables": [
+        "S",
+        "S",
+        "L"
+      ],
+      "why": "كَ + تَ + بُو — ثلاثة مقاطع لا أربعة",
+      "source": "hand_verified"
+    },
+    {
+      "id": "diphthong_bayt",
+      "title": "اللين يغلق المقطع",
+      "input": "بَيْتٌ",
+      "expectSyllables": [
+        "L",
+        "L"
+      ],
+      "why": "بَيْ + تُنْ",
+      "source": "hand_verified"
+    },
+    {
+      "id": "wasl_shortens_madd",
+      "title": "التقاء الساكنين يقصر حرف المدّ",
+      "input": "فِي الْبَيْتِ",
+      "expectSyllables": [
+        "L",
+        "L",
+        "L"
+      ],
+      "why": "فِلْ + بَيْ + تِ ← ياء «في» تسقط عند التقاء الساكنين، والكسرة تُشبَع",
+      "source": "hand_verified"
+    },
+    {
+      "id": "hamzat_wasl_line_start",
+      "title": "همزة الوصل تُنطق في أول الشطر",
+      "input": "الْبَيْتُ",
+      "expectSyllables": [
+        "L",
+        "L",
+        "L"
+      ],
+      "why": "أَلْ + بَيْ + تُ ← وإشباع الضمة يجعل الأخير طويلًا",
+      "source": "hand_verified"
+    },
+    {
+      "id": "unwritten_alef",
+      "title": "ألف تُنطق ولا تُكتب",
+      "input": "هذا",
+      "expectSyllables": [
+        "L",
+        "L"
+      ],
+      "why": "هَا + ذَا",
+      "source": "hand_verified"
+    },
+    {
+      "id": "lam_qamariyya_sukun",
+      "title": "اللام القمرية مع سكون آخر الشطر = فاعلن",
+      "input": "الْقَمَرْ",
+      "expectSyllables": [
+        "L",
+        "S",
+        "L"
+      ],
+      "why": "أَلْ + قَ + مَرْ — نمط فَاعِلُنْ بعينه",
+      "source": "hand_verified"
+    },
+    {
+      "id": "overlong_at_line_end",
+      "title": "المقطع المفرط الطول لا يقع إلا في آخر الشطر",
+      "input": "كِتَابْ",
+      "expectSyllables": [
+        "S",
+        "X"
+      ],
+      "why": "كِ + تَابْ ← التقاء الساكنين جائز في آخر الشطر فيبقى المقطع مفرطًا (X). ووسط الشطر يقصر حتمًا إلى L، وهو ما تختبره حالة wasl_shortens_madd.",
+      "source": "hand_verified"
+    }
+  ],
+  "meterSelfCheck": {
+    "description": "كل بحر يجب أن يطابق نمطه هو بدرجة تامة. تُشتق آليًا من meters.json فلا تحتاج صيانة عند إضافة بحر.",
+    "requiredScore": 1.0
+  },
+  "verses": [],
+  "pending": {
+    "description": "ما ينقص لإكمال مجموعة الاختبار. كل بند هنا يمنع تثبيت قاعدة ما.",
+    "items": [
+      {
+        "need": "٣ أبيات على الأقل لكل بحر من البحور الاثني عشر المفعَّلة، مع تقطيعها من تطبيق ميزان النبط",
+        "unblocks": "حالات verses الحقيقية، ومعايرة أوزان scoring.json على سلوك مرجعي"
+      },
+      {
+        "need": "بيت صخري واحد مقطَّع",
+        "unblocks": "حسم تفعيلة «مفاعلاتن» بين ما ورد وبين مفاعلتن ومفاعيلن"
+      },
+      {
+        "need": "بيت هلالي طويل + بيت مسحوب، مقطَّعان",
+        "unblocks": "تفعيل الهلالي الطويل — معطَّل الآن"
+      },
+      {
+        "need": "٣ لقطات تُظهر النمط الرقمي في التطبيق لبحور مختلفة الطول",
+        "unblocks": "ترميز nabati_app في encodings.json"
+      },
+      {
+        "need": "تفعيلات السامري",
+        "unblocks": "إعادة البحر المفقود من القائمة القديمة"
+      },
+      {
+        "need": "أبيات نبطية عامية فيها تسكين أواخر الكلمات",
+        "unblocks": "قواعد اللهجة في lexicon.nabatiDialect — فارغة عمدًا"
+      }
+    ]
+  }
+}
