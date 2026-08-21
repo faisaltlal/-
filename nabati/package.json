@@ -1,0 +1,13 @@
+{
+  "name": "nabati-prosody-engine",
+  "version": "0.1.0",
+  "description": "محرك تحليل ووزن الشعر النبطي — حتمي، قائم على القواعد، بلا نموذج لغوي",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "bundle": "node tools/bundle-data.js && node tools/build-standalone.js",
+    "check-bundle": "node tools/bundle-data.js --check && node tools/build-standalone.js --check",
+    "test": "node tests/run.js"
+  },
+  "engines": { "node": ">=18" }
+}

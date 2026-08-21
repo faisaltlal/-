@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>محرك عروض الشعر النبطي — واجهة تجربة</title>
+<meta name="description" content="تحليل ووزن الشعر النبطي: البحر، التفعيلات، التقطيع، النمط الرقمي، وموضع الكسر.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>📜</text></svg>">
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>محرك عروض الشعر النبطي</h1>
+  <p>محرك حتمي قائم على القواعد — بلا نموذج لغوي وبلا نسب مقدَّرة. كل ما تراه مشتق من قواعد العروض وقاعدة الأوزان.</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" data-tab="analyze" aria-selected="true">تحليل بيت</button>
+  <button role="tab" data-tab="poem" aria-selected="false">تحليل قصيدة</button>
+  <button role="tab" data-tab="train" aria-selected="false">تدريب</button>
+  <button role="tab" data-tab="meters" aria-selected="false">البحور</button>
+  <button role="tab" data-tab="open" aria-selected="false">ما يحتاج تحقّقًا</button>
+</nav>
+
+<!-- ============ تحليل بيت ============ -->
+<section id="tab-analyze">
+  <div class="panel">
+    <h2>البيت</h2>
+    <textarea id="input" placeholder="اكتب بيتًا نبطيًا…&#10;التشكيل يرفع دقة النتيجة كثيرًا. للفصل بين الشطرين استعمل ...&#10;مثال: مُسْتَفْعِلُنْ مُسْتَفْعِلُنْ فَاعِلَاتُنْ" spellcheck="false"></textarea>
+    <div class="row">
+      <button class="go" id="run">حلّل</button>
+      <label class="check"><input type="checkbox" id="debug"> وضع التتبّع</label>
+      <span class="grow"></span>
+      <span class="muted" id="timing"></span>
+    </div>
+    <div class="samples" id="samples"></div>
+  </div>
+
+  <div id="result" class="hidden"></div>
+</section>
+
+<!-- ============ قصيدة ============ -->
+<section id="tab-poem" class="hidden">
+  <div class="panel">
+    <h2>القصيدة — بيت في كل سطر</h2>
+    <textarea id="poemInput" rows="8" spellcheck="false" placeholder="بيت في كل سطر…"></textarea>
+    <div class="row"><button class="go" id="runPoem">حلّل القصيدة</button></div>
+  </div>
+  <div id="poemResult"></div>
+</section>
+
+<!-- ============ تدريب ============ -->
+<section id="tab-train" class="hidden">
+  <div class="panel">
+    <h2>وضع التدريب</h2>
+    <div class="row">
+      <select id="trainMeter" class="grow"></select>
+      <select id="trainLevel" style="width:auto">
+        <option value="easy">سهل — ٨٠٪</option>
+        <option value="medium" selected>متوسط — ٩٠٪</option>
+        <option value="hard">صعب — ٩٧٪ وبلا رخص</option>
+      </select>
+    </div>
+    <p class="muted" id="trainHint"></p>
+    <textarea id="trainInput" spellcheck="false" placeholder="اكتب بيتك على هذا البحر…"></textarea>
+    <div class="row"><button class="go" id="runTrain">تحقّق</button></div>
+  </div>
+  <div id="trainResult"></div>
+</section>
+
+<!-- ============ البحور ============ -->
+<section id="tab-meters" class="hidden">
+  <div class="panel">
+    <h2>قاعدة الأوزان</h2>
+    <div class="scroll"><table id="metersTable"></table></div>
+  </div>
+</section>
+
+<!-- ============ معلَّق ============ -->
+<section id="tab-open" class="hidden">
+  <div class="panel">
+    <h2>ما لم يُحسم بعد</h2>
+    <p class="muted">كل بند هنا قاعدة لم تُثبَّت لأن المادة المصدرية لم تكفِ لإثباتها. لم يُخترع شيء مكانها.</p>
+    <div id="openList"></div>
+  </div>
+</section>
+
+<footer>
+  <p>المحرك يعمل كاملًا داخل متصفحك — لا خادم ولا شبكة ولا إرسال لأي نصّ.</p>
+  <p>أضف <code>?debug=1</code> إلى الرابط لتشغيل التتبّع دائمًا.</p>
+  <p>نسخة بملف واحد مكتفٍ بذاته (تعمل بلا إنترنت): <code>standalone.html</code></p>
+</footer>
+
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
